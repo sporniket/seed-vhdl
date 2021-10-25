@@ -1,0 +1,6 @@
+#Working directories
+workspace
+
+# Xilinx ISE stuff
+iseconfig
+*.xise
