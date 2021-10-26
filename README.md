@@ -20,9 +20,9 @@ _When giving examples of file pathes, projects will be stored inside at an hypot
 * In the project folder, clone your repository : `git clone https://github.com/super-contributor/seed-vhdl`
 * Note the path to the cloned repository, e.g. `/path/to/projects/seed-vhdl`.
 * With ISE, create a new Project using the following value
-  * **Name** : the name of your project, e.g. `super-project`
-  * **Location** : the path of the project, e.g. `/path/to/projects/super-project`
-  * **Working Directory** : it **MUST** be a subdirectory named `workspace`, e.g. `/path/to/projects/super-project/workspace`
+  * **Name** : the name of your project, e.g. `seed-vhdl`
+  * **Location** : the path of the project, e.g. `/path/to/projects/seed-vhdl`
+  * **Working Directory** : it **MUST** be a subdirectory named `workspace`, e.g. `/path/to/projects/seed-vhdl/workspace`
 * In the menu _Project_, add a new library named `sporniket`, with the path being the location of the project itself, e.g. `/path/to/projects/seed-vhdl` ; change the setting of all the files with a name starting with `tb_`, that MUST be associated to the _Simulation_ only.
 * Save your project.
 * Modify the project as you see fit, stage your changes, commit them and push them
