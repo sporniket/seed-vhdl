@@ -1,5 +1,5 @@
 # seed-vhdl
-A seed project to fork to bootstrap a VHDL project with all the code I deemed usefull for any purpose.
+A VHDL library to bootstrap a VHDL project with all the code I deemed usefull for any purpose.
 
 > This project is originally made by David SPORN. It is marked
 > with CC0 1.0 Universal. To view a copy of this license, visit
