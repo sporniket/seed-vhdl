@@ -45,26 +45,27 @@ architecture test_suite of n_bits_serializer_be_msb_behavior_test_suite is
 
 	-- declare record type
     type test_vector is record
-    	oe, cs, q, q_bar, watcher : hi ;
+    	oe, cs, ds, q, q_bar, watcher : std_logic ;
     end record;
 
     type test_vector_array is array (natural range <>) of test_vector;
     constant test_vectors : test_vector_array := (
-        -- oe, cs, expected value after clock main edge, starting after reset has been
+        -- expected values after clock main edge, starting after reset has been
         -- asserted then negated
-        -- | oe | cs | q | q_bar | q_watch |
-        (hi_asserted, hi_asserted, '0', '1', '0'),
-        (hi_asserted, hi_asserted, '1', '0', '0'),
-        (hi_negated,  hi_asserted, '1', '0', '0'),
-        (hi_asserted, hi_negated,  '0', '1', '0'),
-        (hi_asserted, hi_asserted, '1', '0', '1'),
-        (hi_asserted, hi_asserted, '0', '1', '0'),
-        (hi_asserted, hi_asserted, '0', '1', '0')
+        -- | oe | cs | ds | q | q_bar | q_watch |
+        (hi_asserted, hi_negated,  hi_asserted, '0', '1', '0'),
+        (hi_asserted, hi_asserted, hi_asserted, '1', '0', '0'),
+        (hi_asserted, hi_asserted, hi_negated,  '0', '1', '0'),
+        (hi_asserted, hi_asserted, hi_negated,  '1', '0', '0'),
+        (hi_negated,  hi_asserted, hi_negated,  '1', '0', '0'),
+        (hi_asserted, hi_negated,  hi_negated,  '0', '1', '0'),
+        (hi_asserted, hi_asserted, hi_negated,  '1', '0', '1'),
+        (hi_asserted, hi_asserted, hi_negated,  '0', '1', '0'),
+        (hi_asserted, hi_asserted, hi_negated,  '0', '1', '0')
     );
 
     -- test signals
     -- inputs
-    -- -- asserted
     signal in_clk,in_rst,in_ds,in_cs,in_oe: std_logic ; -- cannot use subtype, not added in epwave...
     signal data : vc(test_width - 1 downto 0) := loaded_value ;
 
@@ -79,7 +80,7 @@ begin
     port map (
     	-- inputs
         ds => in_ds,
-    	cs => in_cs,
+    	  cs => in_cs,
         oe => in_oe,
         clk => in_clk,
         rst => in_rst,
@@ -113,16 +114,6 @@ begin
         in_clk <= '0';
         in_rst <= '0';
 
-        report "Loading data..." ;
-        in_ds <= hi_asserted ;
-        wait for 2 ns;
-
-        in_clk <= '1';
-        wait for 1 ns;
-        assert out_q = '1' and out_q_watch = '0' report "Loaded state is wrong" ;
-        wait for 1 ns;
-        in_clk <= '0';
-        in_ds <= hi_negated;
         wait for 1 ns;
 
         report "Testing operation state..." ;
@@ -130,6 +121,7 @@ begin
 		for i in test_vectors'range loop
             in_oe <= test_vectors(i).oe;
             in_cs <= test_vectors(i).cs;
+            in_ds <= test_vectors(i).ds;
 			wait for 1 ns;
 
             in_clk <= '1';

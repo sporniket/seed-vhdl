@@ -113,12 +113,14 @@ begin
             bit_watcher := init_value_of_bit_watcher;
             send_to_output(value, bit_watcher, q, q_bar, q_watch) ;
         elsif hi_is_leading_edge(clk) then
-        	if hi_asserted = ds then
-            	value := d;
-            	bit_watcher := init_value_of_bit_watcher;
-        	elsif hi_asserted = cs then
-            	value := value(index_msb - 1 downto 0) & '0' ;
-                bit_watcher := bit_watcher(index_msb - 1 downto 0) & '0' ;
+            if hi_asserted = cs then
+               if hi_asserted = ds then
+                  value := d;
+                  bit_watcher := init_value_of_bit_watcher;
+               else
+                  value := value(index_msb - 1 downto 0) & '0' ;
+                  bit_watcher := bit_watcher(index_msb - 1 downto 0) & '0' ;
+               end if;
             end if;
             if hi_asserted = oe then
             	send_to_output(value, bit_watcher, q, q_bar, q_watch) ;
