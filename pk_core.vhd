@@ -1,16 +1,26 @@
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
--- Copyright (C) 2021 David SPORN.
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
--- This file is part of @TERM{Project}.
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+-- Written in 2021 by David SPORN.
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+-- This file is part of [seed-vhdl] : 
+-- <https://github.com/sporniket/seed-vhdl>
 --
--- @TERM{Project} is free hardware design : you can redistribute it and/or modify it under the terms of the Lesser GNU General Public License as
--- published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+-- [seed-vhdl] is free hardware design : 
 --
--- @TERM{Project} is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
--- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Lesser GNU General Public License for more details.
+-- To the extent possible under law, David SPORN has waived all copyright
+-- and related or neighboring rights to this under the terms of the Creative 
+-- Commons CC0 License as published by the Creative Commons global nonprofit 
+-- organization <https://creativecommons.org/>, either version 1.0 of the 
+-- License, or (at your option) any later version.
 --
--- You should have received a copy of the Lesser GNU General Public License along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+-- This project is distributed in the hope that it will be useful, but
+-- WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+-- or FITNESS FOR A PARTICULAR PURPOSE.  See the Creative Commons CC0 License
+-- for more details.
+--
+-- You should have received a copy of the Creative Commons CC0 License along
+-- with this project. If not, see 
+-- <http://creativecommons.org/publicdomain/zero/1.0/>.
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
