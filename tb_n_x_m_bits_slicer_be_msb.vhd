@@ -1,15 +1,15 @@
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- Written in 2021 by David SPORN.
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- This file is part of [seed-vhdl] :
---
+-- This file is part of [seed-vhdl] : 
+-- <https://github.com/sporniket/seed-vhdl>
 --
 -- [seed-vhdl] is free hardware design :
 --
 -- To the extent possible under law, David SPORN has waived all copyright
 -- and related or neighboring rights to this under the terms of the Creative
 -- Commons CC0 License as published by the Creative Commons global nonprofit
--- organization , either version 1.0 of the
+-- organization <https://creativecommons.org/>, either version 1.0 of the
 -- License, or (at your option) any later version.
 --
 -- This project is distributed in the hope that it will be useful, but
@@ -19,7 +19,7 @@
 --
 -- You should have received a copy of the Creative Commons CC0 License along
 -- with this project. If not, see
--- .
+-- <http://creativecommons.org/publicdomain/zero/1.0/>.
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -

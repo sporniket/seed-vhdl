@@ -1,15 +1,15 @@
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- Written in 2021 by David SPORN.
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- This file is part of [seed-vhdl] :
---
+-- This file is part of [seed-vhdl] : 
+-- <https://github.com/sporniket/seed-vhdl>
 --
 -- [seed-vhdl] is free hardware design :
 --
 -- To the extent possible under law, David SPORN has waived all copyright
 -- and related or neighboring rights to this under the terms of the Creative
 -- Commons CC0 License as published by the Creative Commons global nonprofit
--- organization , either version 1.0 of the
+-- organization <https://creativecommons.org/>, either version 1.0 of the
 -- License, or (at your option) any later version.
 --
 -- This project is distributed in the hope that it will be useful, but
@@ -19,7 +19,7 @@
 --
 -- You should have received a copy of the Creative Commons CC0 License along
 -- with this project. If not, see
--- .
+-- <http://creativecommons.org/publicdomain/zero/1.0/>.
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
@@ -133,7 +133,7 @@ begin
         and out_q_bar = test_vectors(i).q_bar
         and out_q_strobe = test_vectors(i).q_strobe
       report "test_vector " & integer'image(i) & " failed " &
-        " got '" & 
+        " got '" &
         to_string(out_q) & "':'" & to_string(out_q_bar) & "':'" & to_string(out_q_strobe) &
         "' instead of '" &
         to_string(test_vectors(i).q) & "':'" & to_string(test_vectors(i).q_bar) & "':'" & to_string(test_vectors(i).q_strobe) & "'"
