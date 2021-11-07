@@ -36,6 +36,9 @@ library sporniket;
 use sporniket.core.all;
 use sporniket.test.all;
 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+-- See https://github.com/sporniket/seed-vhdl/wiki/n_x_m_bits_joiner_be_msb
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 entity n_x_m_bits_joiner_be_msb_behavior_test_suite is
 end n_x_m_bits_joiner_be_msb_behavior_test_suite;
 

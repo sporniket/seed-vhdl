@@ -37,9 +37,10 @@ library sporniket;
 use sporniket.core.all;
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
---- n x m-bits slicer -- Big Endian, MSB first
+-- Deserialize a sequence of N values of M bits into a N×M bits value, starting
+-- from the Most Significant Slice (MSS). When M = 1, this is a deserializer.
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- see https://github.com/sporniket/seed-vhdl/wiki/n_x_m_bits_joiner_be_msb
+-- See https://github.com/sporniket/seed-vhdl/wiki/n_x_m_bits_joiner_be_msb
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
@@ -71,14 +72,6 @@ entity n_x_m_bits_joiner_be_msb is
   );
 end n_x_m_bits_joiner_be_msb;
 
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- n-bit -- Big Endian
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
---
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 architecture behavior of n_x_m_bits_joiner_be_msb is
   constant index_msb_full : integer := slice_count * slice_width - 1;
   constant index_msb_shift : integer := index_msb_full - slice_width;

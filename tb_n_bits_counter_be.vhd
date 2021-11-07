@@ -36,6 +36,9 @@ library sporniket;
 use sporniket.core.all;
 use sporniket.test.all;
 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+-- See https://github.com/sporniket/seed-vhdl/wiki/n_bits_counter_be
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 entity n_bits_counter_be_behavior_test_suite is
 end n_bits_counter_be_behavior_test_suite;
 
