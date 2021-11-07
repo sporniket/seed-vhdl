@@ -52,13 +52,13 @@ architecture test_suite of n_x_m_bits_slicer_be_msb_behavior_test_suite is
   type test_vector is record
     rst, oe, cs, x_strobe : std_logic;
     q, q_bar : std_logic_vector(test_slice_width - 1 downto 0);
-    q_watch : std_logic;
+    q_strobe : std_logic;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When rst is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | x_strobe | q | q_bar | q_watch |
+    -- | rst | oe | cs | x_strobe | q | q_bar | q_strobe |
     (hi_asserted, hi_negated, hi_negated, hi_negated, "00", "11", '0'),
     (hi_negated, hi_asserted, hi_negated, hi_asserted, "00", "11", '0'),
     (hi_negated, hi_asserted, hi_asserted, hi_asserted, "10", "01", '0'),
@@ -81,7 +81,7 @@ architecture test_suite of n_x_m_bits_slicer_be_msb_behavior_test_suite is
 
   -- outputs
   signal out_q, out_q_bar: vc(test_slice_width - 1 downto 0);
-  signal out_q_watch : std_logic;
+  signal out_q_strobe : std_logic;
 
 begin
   dut : entity work.n_x_m_bits_slicer_be_msb
@@ -104,7 +104,7 @@ begin
       -- outputs
       q => out_q,
       q_bar => out_q_bar,
-      q_watch => out_q_watch
+      q_strobe => out_q_strobe
     );
 
   execute : process
@@ -138,13 +138,13 @@ begin
       assert
         out_q = test_vectors(i).q
         and out_q_bar = test_vectors(i).q_bar
-        and out_q_watch = test_vectors(i).q_watch
+        and out_q_strobe = test_vectors(i).q_strobe
       report "test_vector " & integer'image(i) & " failed " &
-        " got '" & to_string(out_q & out_q_bar & out_q_watch) &
+        " got '" & to_string(out_q & out_q_bar & out_q_strobe) &
         "' instead of '" &
         to_string(test_vectors(i).q &
         test_vectors(i).q_bar &
-        test_vectors(i).q_watch) & "'"
+        test_vectors(i).q_strobe) & "'"
       severity failure ;
 
       -- end of clock pulse, anyway
