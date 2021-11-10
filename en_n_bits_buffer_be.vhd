@@ -45,61 +45,44 @@ use sporniket.core.all;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 entity n_bits_buffer_be is
-	generic(
-    	width : integer := 32
-    ) ;
-    port(
-    	-- -- control signals
-        -- chip select : when asserted at leading clock edge, input data is loaded
-        cs : in hi ;
-        -- output enable : when asserted at leading clock edge, the output bit is updated
-        oe : in hi ;
-        -- clock : on leading edge, the state is updated.
-        clk : in hi ;
-        -- asynchronous reset : value is reset to zero.
-        rst : in hi ;
+  generic
+  (
+    width : integer := 32
+  ) ;
+  port(
+    -- control signals
+    rst : in hi ; -- asynchronous reset : value is reset to «zero»
+    clk : in hi ; -- clock : on leading edge, the state is updated
+    cs : in hi ; -- chip select : when asserted at leading clock edge, input data is loaded
+    oe : in hi ; -- output enable : when asserted at leading clock edge, the output is updated
 
-        -- -- input signals
-        -- data to load the register
-        d : in vc(width - 1 downto 0) ;
+    -- input signals
+    -- Input are used only when cs is asserted.
+    x : in vc(width - 1 downto 0) ; -- data to buffer
 
-        -- -- output signals
-        -- q : the next bit, starting from the most significant byte
-        q : out vc(width - 1 downto 0)
-    );
+    -- -- output signals
+    -- q : the next bit, starting from the most significant byte
+    q : out vc(width - 1 downto 0) -- the buffered data
+  );
 end n_bits_buffer_be;
 
 architecture behavior of n_bits_buffer_be is
-	constant index_msb : integer := width - 1;
-    constant value_zero : vc(index_msb downto 0) := (others => '0');
-
-    procedure send_to_output(
-    	variable source_value : in vc(index_msb downto 0) ;
-    	variable source_watcher : in vc(index_msb downto 0) ;
-        signal recipient_q : out hi;
-        signal recipient_q_bar : out lo;
-        signal recipient_watcher : out hi
-    ) is
-    begin
-    	recipient_q <= source_value(index_msb) ;
-        recipient_q_bar <= not source_value(index_msb);
-        recipient_watcher <= source_watcher(index_msb);
-    end procedure;
-
+  constant index_msb : integer := width - 1;
+  constant value_zero : vc(index_msb downto 0) := (others => '0');
 begin
-	on_event:process(clk,rst)
-    	variable value : vc(index_msb downto 0) := value_zero;
-    begin
-    	if hi_asserted = rst then
-        	value := value_zero;
-            q <= value;
-        elsif hi_is_leading_edge(clk) then
-        	if hi_asserted = cs then
-            	value := d;
-            end if;
-            if hi_asserted = oe then
-            	q <= value;
-            end if;
-        end if;
-    end process on_event;
+  on_event:process(clk,rst)
+    variable value : vc(index_msb downto 0) := value_zero;
+  begin
+    if hi_asserted = rst then
+      value := value_zero;
+      q <= value;
+    elsif hi_is_leading_edge(clk) then
+      if hi_asserted = cs then
+        value := x;
+      end if;
+      if hi_asserted = oe then
+        q <= value;
+      end if;
+    end if;
+  end process on_event;
 end behavior ;
