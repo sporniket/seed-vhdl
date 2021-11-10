@@ -45,47 +45,47 @@ use sporniket.core.all;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 entity n_bits_counter_be is
-	generic(
-    	width : integer := 32
-    ) ;
-    port(
-    	-- -- control signals
-    	-- Chip Select : when asserted at leading clock edge, internal counter is running.
-        cs : in hi ;
-        -- Output Enable : when asserted at leading clock edge, q is updated.
-        oe : in hi ;
-        -- Clock.
-        clk : in hi ;
-        -- Asynchronous reset : when asserted, all is set to zero.
-        rst : in hi ;
+  generic
+  (
+    width : integer := 32
+  ) ;
+  port
+  (
+    -- control signals
+    rst : in hi ; -- asynchronous reset : value is reset to «zero»
+    clk : in hi ; -- clock : on leading edge, the state is updated
+    cs : in hi ; -- chip select : when asserted at leading clock edge, internal counter is running
+    oe : in hi ; -- output enable : when asserted at leading clock edge, the output is updated
 
-    	-- -- input signals
+    -- input signals
+    -- Inputs are used only when cs is asserted.
+    -- None
 
-    	-- -- output signals
-        -- output value.
-        q : out vc(width - 1 downto 0)
-    );
+    -- output signals
+    -- Outputs are updated only when oe or rst are asserted.
+    q : out vc(width - 1 downto 0) -- the value of the counter
+  );
 end n_bits_counter_be;
 
 architecture behavior of n_bits_counter_be is
-	constant max_value : integer := (2**width) ;
+  constant max_value : integer := (2**width) ;
 begin
-	on_event:process(clk,rst)
-    	variable value : integer := 0;
-    begin
-    	if hi_asserted = rst then
-        	value := 0;
-           	q <= std_logic_vector(to_unsigned(value, q'length));
-        elsif hi_is_leading_edge(clk) then
-        	if hi_asserted = cs then
-            	value := value + 1 ;
-                if (value >= max_value) then
-                	value := 0 ;
-                end if;
-            end if;
-            if hi_asserted = oe then
-            	q <= std_logic_vector(to_unsigned(value, q'length));
-            end if;
+  on_event:process(clk,rst)
+    variable value : integer := 0;
+  begin
+    if hi_asserted = rst then
+      value := 0;
+      q <= std_logic_vector(to_unsigned(value, q'length));
+    elsif hi_is_leading_edge(clk) then
+      if hi_asserted = cs then
+        value := value + 1 ;
+        if (value >= max_value) then
+          value := 0 ;
         end if;
-    end process on_event;
+      end if;
+      if hi_asserted = oe then
+        q <= std_logic_vector(to_unsigned(value, q'length));
+      end if;
+    end if;
+  end process on_event;
 end behavior ;
