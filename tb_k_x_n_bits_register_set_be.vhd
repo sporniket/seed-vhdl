@@ -85,7 +85,7 @@ architecture test_suite of k_x_n_bits_register_set_be_behavior_test_suite is
   signal out_q: vc(width_of_output - 1 downto 0);
 
 begin
-  dut : entity work.k_x_n_bits_register_set_be
+  dut : entity sporniket.k_x_n_bits_register_set_be
     generic map
     (
       register_count => test_register_count,

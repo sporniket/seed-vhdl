@@ -66,23 +66,30 @@ entity n_bits_buffer_be is
   );
 end n_bits_buffer_be;
 
-architecture behavior of n_bits_buffer_be is
-  constant index_msb : integer := width - 1;
-  constant value_zero : vc(index_msb downto 0) := (others => '0');
+architecture structural of n_bits_buffer_be is
+  signal in_x_select : natural range 0 to 0 := 0;
+  signal in_x_strobe : hi := '1';
 begin
-  on_event:process(clk,rst)
-    variable value : vc(index_msb downto 0) := value_zero;
-  begin
-    if hi_asserted = rst then
-      value := value_zero;
-      q <= value;
-    elsif hi_is_leading_edge(clk) then
-      if hi_asserted = cs then
-        value := x;
-      end if;
-      if hi_asserted = oe then
-        q <= value;
-      end if;
-    end if;
-  end process on_event;
-end behavior ;
+  single_n_bit_register_set: entity sporniket.k_x_n_bits_register_set_be
+    generic map
+    (
+      register_count => 1,
+      register_width => width
+    )
+    port map
+    (
+      -- inputs
+      cs => cs,
+      oe => oe,
+      clk => clk,
+      rst => rst,
+
+      x_select => in_x_select,
+      x_strobe => in_x_strobe,
+      x_value => x,
+
+      -- outputs
+      q => q
+    )
+  ;
+end structural ;

@@ -82,7 +82,7 @@ architecture test_suite of n_x_m_bits_joiner_be_msb_behavior_test_suite is
   signal out_q_strobe : std_logic;
 
 begin
-  dut : entity work.n_x_m_bits_joiner_be_msb
+  dut : entity sporniket.n_x_m_bits_joiner_be_msb
     generic map
     (
       slice_count => test_slice_count,

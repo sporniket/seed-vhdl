@@ -84,7 +84,7 @@ architecture test_suite of n_bits_counter_be_behavior_test_suite is
   signal out_q : vc(index_msb downto 0);
 
 begin
-  dut : entity work.n_bits_counter_be
+  dut : entity sporniket.n_bits_counter_be
     generic map
     (
       width => test_width

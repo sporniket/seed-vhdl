@@ -73,7 +73,7 @@ architecture test_suite of n_bits_serializer_be_msb_behavior_test_suite is
     signal out_q, out_q_bar, out_q_watch : std_logic;
 
 begin
-	dut : entity work.n_bits_serializer_be_msb
+	dut : entity sporniket.n_bits_serializer_be_msb
     generic map (
     	width => test_width
     )
