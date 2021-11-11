@@ -37,94 +37,58 @@ library sporniket;
 use sporniket.core.all;
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
---- n-bits serializer -- Big Endian, MSB first
+--- A.k.a shift register, transform a given value into it's sequence of bits, starting from the Most Significant Bit (MSB).
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- Shifting is operated at leading edge
+-- See https://github.com/sporniket/seed-vhdl/wiki/n_bits_serializer_be_msb
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 entity n_bits_serializer_be_msb is
-	generic(
-    	width : integer := 32
-    ) ;
-    port(
-    	-- -- control signals
-        -- data strobe : when asserted at leading clock edge, the register loads its value from data.
-        ds : in hi ;
-        -- chip select : when asserted, and ds is negated, at leading clock edge, internal value
-        --     is shifted to send next bit
-        cs : in hi ;
-        -- output enable : when asserted, at leading clock edge, the output bit is updated
-        oe : in hi ;
-        -- clock : on leading edge, the state is updated.
-        clk : in hi ;
-        -- asynchronous reset : value is reset to zero.
-        rst : in hi ;
+  generic
+  (
+    width : integer := 32
+  ) ;
+  port(
+    -- control signals
+    rst : in hi ; -- asynchronous reset : value is reset to «zero»
+    clk : in hi ; -- on leading edge, the state is updated
+    cs : in hi ; -- chip select : when asserted at leading clock edge, input data is used
+    oe : in hi ; -- output enable : when asserted at leading clock edge, the output is updated
 
-        -- -- input signals
-        -- data to load the register
-        d : in vc(width - 1 downto 0) ;
+    -- input signals
+    x : in vc(width - 1 downto 0) ; -- data to serialize
+    x_strobe : in hi ; -- data strobe : when asserted at leading clock edge, the register loads its value from `x`, and outputs the MSB is to `q`
 
-        -- -- output signals
-        -- q : the next bit, starting from the most significant byte
-        q : out hi ;
-        -- q bar : the inverse of q (q bar = not q)
-        q_bar : out lo ;
-        -- q watch : asserted when it is the last bit.
-        q_watch : out hi
+    -- output signals
+    q : out hi ; -- the next bit, starting from the MSB
+    q_bar : out lo ; -- the negated value of `q`
+    q_strobe : out hi -- output strobe, asserted when `q` is the LSB (Least Significant Bit)
 
-    );
+  );
 end n_bits_serializer_be_msb;
 
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- n-bit -- Big Endian
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
---
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-architecture behavior of n_bits_serializer_be_msb is
-	constant index_msb : integer := width - 1;
-    constant value_zero : vc(index_msb downto 0) := (others => '0');
-    constant init_value_of_bit_watcher : vc(index_msb downto 0) := std_logic_vector(to_unsigned(1, width));
-
-    procedure send_to_output(
-    	variable source_value : in vc(index_msb downto 0) ;
-    	variable source_watcher : in vc(index_msb downto 0) ;
-        signal recipient_q : out hi;
-        signal recipient_q_bar : out lo;
-        signal recipient_watcher : out hi
-    ) is
-    begin
-    	recipient_q <= source_value(index_msb) ;
-        recipient_q_bar <= not source_value(index_msb);
-        recipient_watcher <= source_watcher(index_msb);
-    end procedure;
-
+architecture structural of n_bits_serializer_be_msb is
 begin
-	on_event:process(clk,rst)
-    	variable value : vc(index_msb downto 0) := value_zero;
-    	variable bit_watcher : vc(index_msb downto 0) := init_value_of_bit_watcher;
-    begin
-    	if hi_asserted = rst then
-        	value := value_zero;
-            bit_watcher := init_value_of_bit_watcher;
-            send_to_output(value, bit_watcher, q, q_bar, q_watch) ;
-        elsif hi_is_leading_edge(clk) then
-            if hi_asserted = cs then
-               if hi_asserted = ds then
-                  value := d;
-                  bit_watcher := init_value_of_bit_watcher;
-               else
-                  value := value(index_msb - 1 downto 0) & '0' ;
-                  bit_watcher := bit_watcher(index_msb - 1 downto 0) & '0' ;
-               end if;
-            end if;
-            if hi_asserted = oe then
-            	send_to_output(value, bit_watcher, q, q_bar, q_watch) ;
-            end if;
-        end if;
-    end process on_event;
-end behavior ;
+  single_bit_slicer: entity sporniket.n_x_m_bits_slicer_be_msb
+    generic map (
+      slice_count => width,
+      slice_width => 1
+    )
+    port map (
+      -- inputs
+      cs => cs,
+      oe => oe,
+      clk => clk,
+      rst => rst,
+
+      x_strobe => x_strobe,
+      x => x,
+
+      -- outputs
+      q(0) => q,
+      q_bar(0) => q_bar,
+      q_strobe => q_strobe
+    )
+  ;
+end structural ;
