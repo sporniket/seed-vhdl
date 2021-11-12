@@ -37,14 +37,15 @@ library sporniket;
 use sporniket.core.all;
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- Muxer that outputs a n-bits value selected among k values.
+-- Demuxer that outputs a stream of n-bit value into a k×n-bits value representing
+-- the concatenation of k channels of n-bits values.
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- See https://github.com/sporniket/seed-vhdl/wiki/k_channels_x_n_bits_muxer_be
+-- See https://github.com/sporniket/seed-vhdl/wiki/k_channels_x_n_bits_demuxer_be
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-entity k_channels_x_n_bits_muxer_be is
+entity k_channels_x_n_bits_demuxer_be is
   generic
   (
     channel_count : positive := 2;
@@ -60,18 +61,37 @@ entity k_channels_x_n_bits_muxer_be is
 
     -- input signals
     -- Inputs are used only when cs is asserted.
-    x : in vc(channel_count * channel_width - 1 downto 0); -- The concatenation of the k channels x(k-1) & ... & x(0)
+    x : in vc(channel_width - 1 downto 0); -- the muxed value
+    x_latch : in hi ; -- when asserted, the channels that are not selected keep their value ; when negated, thoses channels are zeroed
     x_sel : in natural range 0 to channel_count - 1; -- The channel to select
 
     -- output signals
     -- Outputs are updated only when oe or rst are asserted.
-    q : out vc(channel_width - 1 downto 0) -- the value from the selected channel
+    q : out vc(channel_count * channel_width - 1 downto 0) -- The concatenation of the k channels x(k-1) & ... & x(0)
   );
-end k_channels_x_n_bits_muxer_be;
+end k_channels_x_n_bits_demuxer_be;
 
-architecture behavior of k_channels_x_n_bits_muxer_be is
-  constant index_msb_full : integer := channel_width - 1;
+architecture behavior of k_channels_x_n_bits_demuxer_be is
+  constant index_msb_full : integer := channel_count * channel_width - 1;
   constant value_zero : vc(index_msb_full downto 0) := (others => '0');
+
+  function update_value
+  (
+    reference_value : vc(index_msb_full downto 0);
+    signal x : vc(channel_width - 1 downto 0);
+    signal x_sel : natural range 0 to channel_count - 1
+  )
+  return vc
+  is begin
+    if 0 = x_sel then
+      return reference_value(index_msb_full downto channel_width) & x;
+    elsif channel_count - 1 = x_sel then
+      return x & reference_value(index_msb_full - channel_width downto 0);
+    else
+      return reference_value(index_msb_full downto (x_sel + 1) * channel_width) & x & reference_value(x_sel * channel_width - 1 downto 0);
+    end if;
+  end update_value;
+
 begin
   on_event : process (clk, rst)
     variable value : vc(index_msb_full downto 0) := value_zero;
@@ -81,7 +101,11 @@ begin
       q <= value;
     elsif hi_is_leading_edge(clk) then
       if hi_asserted = cs then
-        value := x(index_msb_full + x_sel * channel_width downto x_sel * channel_width) ;
+        if hi_asserted = x_latch then
+          value := update_value(value, x, x_sel);
+        else
+          value := update_value(value_zero, x, x_sel);
+        end if;
       end if;
       if hi_asserted = oe then
         q <= value;
