@@ -67,7 +67,11 @@ architecture test_suite of n_x_m_bits_joiner_be_msb_behavior_test_suite is
     (hi_negated, hi_negated, hi_asserted, "10", "0000100110", "1111011001", '0'),
     (hi_negated, hi_asserted, hi_negated, "01", "0010011010", "1101100101", '0'),
     (hi_negated, hi_asserted, hi_asserted, "10", "1001101010", "0110010101", '1'),
-    (hi_negated, hi_asserted, hi_asserted, "00", "0110101000", "1001010111", '0')
+    (hi_negated, hi_asserted, hi_asserted, "00", "0110101000", "1001010111", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "00", "1010100000", "0101011111", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "00", "1010000000", "0101111111", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "00", "1000000000", "0111111111", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "00", "0000000000", "1111111111", '1')
   );
 
   -- test signals

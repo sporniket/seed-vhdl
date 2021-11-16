@@ -66,7 +66,11 @@ architecture test_suite of n_bits_deserializer_be_msb_behavior_test_suite is
     (hi_negated, hi_negated, hi_asserted, '0', "00101", "11010", '0'),
     (hi_negated, hi_asserted, hi_negated, '0', "01010", "10101", '0'),
     (hi_negated, hi_asserted, hi_asserted, '1', "10101", "01010", '1'),
-    (hi_negated, hi_asserted, hi_asserted, '0', "01010", "10101", '0')
+    (hi_negated, hi_asserted, hi_asserted, '0', "01010", "10101", '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "10100", "01011", '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "01000", "10111", '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "10000", "01111", '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "00000", "11111", '1')
   );
 
   -- test signals

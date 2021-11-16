@@ -110,7 +110,7 @@ begin
         if value_strober = done_value_of_value_strober then
           value_strober := init_value_of_value_strober;
         else
-          value_strober := value_strober(index_msb_strober - 1 downto 0) & '0';
+          value_strober := value_strober(index_msb_strober - 1 downto 0) & value_strober(index_msb_strober);
         end if;
       end if;
       if hi_asserted = oe then
