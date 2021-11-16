@@ -111,10 +111,7 @@ begin
 
   execute : process
   begin
-    report "prepare";
-
     wait for 1 ns;
-
     report "Testing operation state...";
 
     for i in test_vectors'range loop

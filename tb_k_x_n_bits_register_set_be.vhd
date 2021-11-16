@@ -109,14 +109,7 @@ begin
 
   execute : process
   begin
-    report "prepare";
-    in_clk <= hi_negated;
-    in_rst <= hi_negated;
-    in_cs <= hi_asserted;
-    in_oe <= hi_asserted;
-
     wait for 1 ns;
-
     report "Testing operation state...";
 
     for i in test_vectors'range loop
