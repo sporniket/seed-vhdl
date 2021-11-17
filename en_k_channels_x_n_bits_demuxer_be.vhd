@@ -67,7 +67,8 @@ entity k_channels_x_n_bits_demuxer_be is
 
     -- output signals
     -- Outputs are updated only when oe or rst are asserted.
-    q : out vc(channel_count * channel_width - 1 downto 0) -- The concatenation of the k channels x(k-1) & ... & x(0)
+    q : out vc(channel_count * channel_width - 1 downto 0); -- The concatenation of the k channels x(k-1) & ... & x(0)
+    q_clk : out hi -- Pulse signaling an update from the output
   );
 end k_channels_x_n_bits_demuxer_be;
 
@@ -95,12 +96,16 @@ architecture behavior of k_channels_x_n_bits_demuxer_be is
 begin
   on_event : process (clk, rst)
     variable value : vc(index_msb_full downto 0) := value_zero;
+    variable will_pulse : hi := hi_negated;
   begin
     if hi_asserted = rst then
       value := value_zero;
       q <= value;
+      will_pulse := hi_negated;
+      q_clk <= hi_negated;
     elsif hi_is_leading_edge(clk) then
       if hi_asserted = cs then
+        will_pulse := hi_asserted;
         if hi_asserted = x_latch then
           value := update_value(value, x, x_sel);
         else
@@ -109,7 +114,13 @@ begin
       end if;
       if hi_asserted = oe then
         q <= value;
+        if hi_asserted = will_pulse then
+          q_clk <= hi_asserted ;
+        end if;
+        will_pulse := hi_negated;
       end if;
+    elsif hi_is_trailing_edge(clk) then
+      q_clk <= hi_negated;
     end if;
   end process on_event;
 end behavior;
