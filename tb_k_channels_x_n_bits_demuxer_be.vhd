@@ -146,7 +146,7 @@ begin
         " got '" &
         to_string(out_q) & "':'" & to_string(out_q_clk) &
         "' instead of '" &
-        to_string(test_vectors(i).q) & "'"
+        to_string(test_vectors(i).q) & "':'" & to_string(test_vectors(i).q_clk) & "'"
       severity failure ;
 
       -- end of clock pulse, anyway
@@ -154,6 +154,7 @@ begin
       in_clk <= '0';
       wait for 1 ns;
 
+      -- do not verify out_q_clk on when reset is asserted.
       if test_vectors(i).rst = hi_negated then
         assert
           out_q_clk = hi_negated
