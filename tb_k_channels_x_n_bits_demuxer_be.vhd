@@ -138,15 +138,23 @@ begin
       end if;
       wait for 1 ns;
 
-      -- verify
+      -- verify -- general
       assert
         out_q = test_vectors(i).q
-        and out_q_clk = test_vectors(i).q_clk
       report "test_vector " & integer'image(i) & " failed " &
         " got '" &
-        to_string(out_q) & "':'" & to_string(out_q_clk) &
+        to_string(out_q) &
         "' instead of '" &
-        to_string(test_vectors(i).q) & "':'" & to_string(test_vectors(i).q_clk) & "'"
+        to_string(test_vectors(i).q) & "'"
+      severity failure ;
+      -- verify -- q_clk
+      assert
+        out_q_clk = test_vectors(i).q_clk
+      report "test_vector " & integer'image(i) & " failed **for q_clk** " &
+        " got '" &
+        to_string(out_q_clk) &
+        "' instead of '" &
+        to_string(test_vectors(i).q_clk) & "'"
       severity failure ;
 
       -- end of clock pulse, anyway
@@ -154,13 +162,11 @@ begin
       in_clk <= '0';
       wait for 1 ns;
 
-      -- do not verify out_q_clk on when reset is asserted.
-      if test_vectors(i).rst = hi_negated then
-        assert
-          out_q_clk = hi_negated
-        report "test_vector " & integer'image(i) & " failed, q_clk is not negated."
-        severity failure ;
-      end if;
+      -- verify -- end of q_clk pulse.
+      assert
+        out_q_clk = hi_negated
+      report "test_vector " & integer'image(i) & " failed, q_clk is not negated."
+      severity failure ;
 
     end loop;
     report "Done.";
