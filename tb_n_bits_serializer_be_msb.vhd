@@ -48,7 +48,7 @@ architecture test_suite of n_bits_serializer_be_msb_behavior_test_suite is
     rst : hi;
     oe : hi;
     cs : hi;
-    ds : hi ;
+    x_strobe : hi ;
     q : hi ;
     q_bar : hi ;
     q_clk : hi;
@@ -80,6 +80,7 @@ architecture test_suite of n_bits_serializer_be_msb_behavior_test_suite is
 
   -- inputs
   signal in_x : vc(test_width - 1 downto 0) := loaded_value ;
+  signal in_x_strobe : hi;
 
   -- outputs
   signal out_q : hi;
@@ -96,13 +97,13 @@ begin
     port map
     (
       -- inputs
-      x_strobe => in_x_strobe,
       cs => in_cs,
       oe => in_oe,
       clk => in_clk,
       rst => in_rst,
 
       x => in_x,
+      x_strobe => in_x_strobe,
 
       -- outputs
       q => out_q,
@@ -121,7 +122,7 @@ begin
       in_rst <= test_vectors(i).rst;
       in_oe <= test_vectors(i).oe;
       in_cs <= test_vectors(i).cs;
-      in_x_strobe <= test_vectors(i).ds;
+      in_x_strobe <= test_vectors(i).x_strobe;
 
       -- clock pulse if appropriate
       wait for 1 ns;

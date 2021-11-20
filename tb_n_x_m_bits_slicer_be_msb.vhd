@@ -53,10 +53,11 @@ architecture test_suite of n_x_m_bits_slicer_be_msb_behavior_test_suite is
     rst : hi;
     oe : hi;
     cs : hi;
+    x_strobe : hi;
     q : vc(test_slice_width - 1 downto 0);
     q_bar : vc(test_slice_width - 1 downto 0);
     q_clk : hi;
-    q_strobe : hi
+    q_strobe : hi;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;
@@ -84,13 +85,13 @@ architecture test_suite of n_x_m_bits_slicer_be_msb_behavior_test_suite is
 
   -- inputs
   signal in_x : vc(width_of_input - 1 downto 0) := loaded_value;
-  signal in_x_strobe : hi
+  signal in_x_strobe : hi;
 
   -- outputs
   signal out_q: vc(test_slice_width - 1 downto 0);
   signal out_q_bar: vc(test_slice_width - 1 downto 0);
   signal out_q_clk : hi;
-  signal out_q_strobe : hi
+  signal out_q_strobe : hi;
 
 begin
   dut : entity sporniket.n_x_m_bits_slicer_be_msb
