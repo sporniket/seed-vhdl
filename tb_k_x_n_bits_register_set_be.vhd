@@ -89,6 +89,7 @@ architecture test_suite of k_x_n_bits_register_set_be_behavior_test_suite is
 
   -- outputs
   signal out_q: vc(width_of_output - 1 downto 0);
+  signal out_q_clk : hi;
 
 begin
   dut : entity sporniket.k_x_n_bits_register_set_be

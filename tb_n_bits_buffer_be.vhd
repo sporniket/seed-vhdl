@@ -69,12 +69,18 @@ architecture test_suite of n_bits_buffer_be_behavior_test_suite is
   );
 
   -- test signals
+  -- control
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
+
   -- inputs
-  signal in_clk,in_rst,in_cs,in_oe: hi ;
   signal in_x : vc(index_msb downto 0) ;
 
   -- outputs
   signal out_q : vc(index_msb downto 0) ;
+  signal out_q_clk : hi;
 
 begin
   dut : entity sporniket.n_bits_buffer_be

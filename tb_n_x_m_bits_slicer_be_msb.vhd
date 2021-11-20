@@ -77,14 +77,19 @@ architecture test_suite of n_x_m_bits_slicer_be_msb_behavior_test_suite is
 
   -- test signals
   -- control
-  signal in_clk, in_rst, in_cs, in_oe : hi
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
 
   -- inputs
   signal in_x : vc(width_of_input - 1 downto 0) := loaded_value;
   signal in_x_strobe : hi
 
   -- outputs
-  signal out_q, out_q_bar: vc(test_slice_width - 1 downto 0);
+  signal out_q: vc(test_slice_width - 1 downto 0);
+  signal out_q_bar: vc(test_slice_width - 1 downto 0);
+  signal out_q_clk : hi;
   signal out_q_strobe : hi
 
 begin

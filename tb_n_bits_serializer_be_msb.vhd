@@ -72,12 +72,20 @@ architecture test_suite of n_bits_serializer_be_msb_behavior_test_suite is
   );
 
   -- test signals
+  -- control
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
+
   -- inputs
-  signal in_clk,in_rst,in_x_strobe,in_cs,in_oe: std_logic ; -- cannot use subtype, not added in epwave...
   signal in_x : vc(test_width - 1 downto 0) := loaded_value ;
 
   -- outputs
-  signal out_q, out_q_bar, out_q_strobe : std_logic;
+  signal out_q : hi;
+  signal out_q_bar : hi;
+  signal out_q_clk : hi;
+  signal out_q_strobe : hi;
 
 begin
   dut : entity sporniket.n_bits_serializer_be_msb

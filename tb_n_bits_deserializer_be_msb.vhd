@@ -52,10 +52,10 @@ architecture test_suite of n_bits_deserializer_be_msb_behavior_test_suite is
     oe : hi;
     cs : hi;
     x : hi;
-    q : std_logic_vector(width_of_output - 1 downto 0);
-    q_bar : std_logic_vector(width_of_output - 1 downto 0);
+    q : vc(width_of_output - 1 downto 0);
+    q_bar : vc(width_of_output - 1 downto 0);
     q_clk : hi;
-    q_strobe : std_logic;
+    q_strobe : hi
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;
@@ -79,14 +79,19 @@ architecture test_suite of n_bits_deserializer_be_msb_behavior_test_suite is
 
   -- test signals
   -- control
-  signal in_clk, in_rst, in_cs, in_oe : std_logic;
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
 
   -- inputs
   signal in_x : hi;
 
   -- outputs
-  signal out_q, out_q_bar: vc(width_of_output - 1 downto 0);
-  signal out_q_strobe : std_logic;
+  signal out_q: vc(width_of_output - 1 downto 0);
+  signal out_q_bar: vc(width_of_output - 1 downto 0);
+  signal out_q_clk : hi;
+  signal out_q_strobe : hi
 
 begin
   dut : entity sporniket.n_bits_deserializer_be_msb

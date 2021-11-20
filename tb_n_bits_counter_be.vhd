@@ -74,15 +74,17 @@ architecture test_suite of n_bits_counter_be_behavior_test_suite is
   );
 
   -- test signals
+  -- control
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
+
   -- inputs
-  -- -- asserted
-  signal in_clk : std_logic;
-  signal in_rst : std_logic;
-  signal in_cs : std_logic;
-  signal in_oe : std_logic; -- cannot use subtype, not added in epwave...
 
   -- outputs
   signal out_q : vc(index_msb downto 0);
+  signal out_q_clk : hi;
 
 begin
   dut : entity sporniket.n_bits_counter_be
