@@ -58,19 +58,19 @@ architecture test_suite of n_bits_counter_be_behavior_test_suite is
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When rst is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | q |
-    (hi_asserted, hi_asserted, hi_asserted, "000"),
-    (hi_negated, hi_asserted, hi_asserted, "001"),
-    (hi_negated, hi_asserted, hi_asserted, "010"),
-    (hi_negated, hi_asserted, hi_asserted, "011"),
-    (hi_negated, hi_negated, hi_asserted, "011"),
-    (hi_negated, hi_negated, hi_asserted, "011"),
-    (hi_negated, hi_asserted, hi_negated, "101"),
-    (hi_negated, hi_asserted, hi_negated, "101"),
-    (hi_negated, hi_asserted, hi_asserted, "110"),
-    (hi_negated, hi_asserted, hi_asserted, "111"),
-    (hi_negated, hi_asserted, hi_asserted, "000"),
-    (hi_negated, hi_asserted, hi_asserted, "001")
+    -- | rst | oe | cs | q | q_ckl |
+    (hi_asserted, hi_asserted, hi_asserted, "000", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "001", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "010", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "011", '1'),
+    (hi_negated, hi_negated, hi_asserted, "011", '0'),
+    (hi_negated, hi_negated, hi_asserted, "011", '0'),
+    (hi_negated, hi_asserted, hi_negated, "101", '1'),
+    (hi_negated, hi_asserted, hi_negated, "101", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "110", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "111", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "000", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "001", '1')
   );
 
   -- test signals

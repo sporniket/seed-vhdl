@@ -61,20 +61,20 @@ architecture test_suite of n_bits_deserializer_be_msb_behavior_test_suite is
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When rst is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | x | q | q_bar | q_strobe |
-    (hi_asserted, hi_negated, hi_negated, '1', "00000", "11111", '0'),
-    (hi_negated, hi_asserted, hi_negated, '1', "00000", "11111", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '1', "00001", "11110", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '0', "00010", "11101", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '1', "00101", "11010", '0'),
-    (hi_negated, hi_negated, hi_asserted, '0', "00101", "11010", '0'),
-    (hi_negated, hi_asserted, hi_negated, '0', "01010", "10101", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '1', "10101", "01010", '1'),
-    (hi_negated, hi_asserted, hi_asserted, '0', "01010", "10101", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '0', "10100", "01011", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '0', "01000", "10111", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '0', "10000", "01111", '0'),
-    (hi_negated, hi_asserted, hi_asserted, '0', "00000", "11111", '1')
+    -- | rst | oe | cs | x | q | q_bar | q_ckl | q_strobe |
+    (hi_asserted, hi_negated, hi_negated, '1', "00000", "11111", '0', '0'),
+    (hi_negated, hi_asserted, hi_negated, '1', "00000", "11111", '0', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '1', "00001", "11110", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "00010", "11101", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '1', "00101", "11010", '1', '0'),
+    (hi_negated, hi_negated, hi_asserted, '0', "00101", "11010", '0', '0'),
+    (hi_negated, hi_asserted, hi_negated, '0', "01010", "10101", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '1', "10101", "01010", '1', '1'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "01010", "10101", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "10100", "01011", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "01000", "10111", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "10000", "01111", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, '0', "00000", "11111", '1', '1')
   );
 
   -- test signals

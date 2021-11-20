@@ -62,17 +62,17 @@ architecture test_suite of n_x_m_bits_slicer_be_msb_behavior_test_suite is
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When rst is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | x_strobe | q | q_bar | q_strobe |
-    (hi_asserted, hi_negated, hi_negated, hi_negated, "00", "11", '0'),
-    (hi_negated, hi_asserted, hi_negated, hi_asserted, "00", "11", '0'),
-    (hi_negated, hi_asserted, hi_asserted, hi_asserted, "10", "01", '0'),
-    (hi_negated, hi_asserted, hi_asserted, hi_negated, "01", "10", '0'),
-    (hi_negated, hi_asserted, hi_asserted, hi_negated, "10", "01", '0'),
-    (hi_negated, hi_negated, hi_asserted, hi_negated, "10", "01", '0'),
-    (hi_negated, hi_asserted, hi_negated, hi_negated, "01", "10", '0'),
-    (hi_negated, hi_asserted, hi_asserted, hi_negated, "10", "01", '1'),
-    (hi_negated, hi_asserted, hi_asserted, hi_negated, "00", "11", '0'),
-    (hi_negated, hi_asserted, hi_asserted, hi_negated, "00", "11", '0')
+    -- | rst | oe | cs | x_strobe | q | q_bar | q_ckl | q_strobe |
+    (hi_asserted, hi_negated, hi_negated, hi_negated, "00", "11", '0', '0'),
+    (hi_negated, hi_asserted, hi_negated, hi_asserted, "00", "11", '0', '0'),
+    (hi_negated, hi_asserted, hi_asserted, hi_asserted, "10", "01", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, hi_negated, "01", "10", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, hi_negated, "10", "01", '1', '0'),
+    (hi_negated, hi_negated, hi_asserted, hi_negated, "10", "01", '0', '0'),
+    (hi_negated, hi_asserted, hi_negated, hi_negated, "01", "10", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, hi_negated, "10", "01", '1', '1'),
+    (hi_negated, hi_asserted, hi_asserted, hi_negated, "00", "11", '1', '0'),
+    (hi_negated, hi_asserted, hi_asserted, hi_negated, "00", "11", '1', '0')
   );
 
   -- test signals
