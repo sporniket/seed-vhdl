@@ -63,6 +63,7 @@ entity n_bits_serializer_be_msb is
     -- output signals
     q : out hi ; -- the next bit, starting from the MSB
     q_bar : out lo ; -- the negated value of `q`
+    q_clk : out hi ; -- Pulse signaling an update from the output
     q_strobe : out hi -- output strobe, asserted when `q` is the LSB (Least Significant Bit)
 
   );
@@ -88,6 +89,7 @@ begin
       -- outputs
       q(0) => q,
       q_bar(0) => q_bar,
+      q_clk => q_clk,
       q_strobe => q_strobe
     )
   ;

@@ -63,21 +63,38 @@ entity n_bits_counter_be is
 
     -- output signals
     -- Outputs are updated only when oe or rst are asserted.
-    q : out vc(width - 1 downto 0) -- the value of the counter
+    q : out vc(width - 1 downto 0); -- the value of the counter
+    q_clk : out hi -- Pulse signaling an update from the output
   );
 end n_bits_counter_be;
 
 architecture behavior of n_bits_counter_be is
   constant max_value : integer := (2**width) ;
+  signal int_clk: hi := hi_negated; -- the internal pulse to generete q_clk
 begin
+  -- q_clk generation
+  on_int_clk : process (int_clk)
+    variable neg1 : lo;
+    variable neg2 : hi;
+  begin
+    neg1 := not int_clk;
+    neg2 := not neg1;
+    q_clk<= neg2;
+  end process on_int_clk;
+
+  -- main process
   on_event:process(clk,rst)
     variable value : integer := 0;
+    variable will_pulse : hi := hi_negated;
   begin
     if hi_asserted = rst then
       value := 0;
       q <= std_logic_vector(to_unsigned(value, q'length));
+      will_pulse := hi_negated;
+      int_clk <= hi_negated;
     elsif hi_is_leading_edge(clk) then
       if hi_asserted = cs then
+        will_pulse := hi_asserted;
         value := value + 1 ;
         if (value >= max_value) then
           value := 0 ;
@@ -85,7 +102,13 @@ begin
       end if;
       if hi_asserted = oe then
         q <= std_logic_vector(to_unsigned(value, q'length));
+        if hi_asserted = will_pulse then
+          int_clk <= hi_asserted ;
+        end if;
+        will_pulse := hi_negated;
       end if;
+    elsif hi_is_trailing_edge(clk) then
+      int_clk <= hi_negated;
     end if;
   end process on_event;
 end behavior ;

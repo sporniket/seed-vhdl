@@ -62,7 +62,8 @@ entity n_bits_buffer_be is
 
     -- -- output signals
     -- q : the next bit, starting from the most significant byte
-    q : out vc(width - 1 downto 0) -- the buffered data
+    q : out vc(width - 1 downto 0); -- the buffered data
+    q_clk : out hi -- Pulse signaling an update from the output
   );
 end n_bits_buffer_be;
 
@@ -89,7 +90,8 @@ begin
       x_value => x,
 
       -- outputs
-      q => q
+      q => q,
+      q_clk => q_clk
     )
   ;
 end structural ;
