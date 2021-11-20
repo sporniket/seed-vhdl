@@ -63,7 +63,7 @@ architecture test_suite of k_x_n_bits_register_set_be_behavior_test_suite is
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When rst is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | x_select | x_strobe | x_value | q | q_ckl |
+    -- | rst | oe | cs | x_select | x_strobe | x_value | q | q_clk |
     (hi_asserted, hi_negated, hi_negated, 0, hi_negated, "11", "00", '0'),
     (hi_negated, hi_asserted, hi_asserted, 0, hi_negated, "11", "00", '1'),
     (hi_negated, hi_asserted, hi_asserted, 1, hi_negated, "11", "00", '1'),

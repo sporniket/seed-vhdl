@@ -58,7 +58,7 @@ architecture test_suite of n_bits_serializer_be_msb_behavior_test_suite is
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When `rst` is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | x_strobe | q | q_bar | q_ckl | q_strobe |
+    -- | rst | oe | cs | x_strobe | q | q_bar | q_clk | q_strobe |
     (hi_asserted, hi_negated, hi_negated,  hi_negated, '0', '1', '0', '0'),
     (hi_negated, hi_asserted, hi_negated,  hi_asserted, '0', '1', '0', '0'),
     (hi_negated, hi_asserted, hi_asserted, hi_asserted, '1', '0', '1', '0'),

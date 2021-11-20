@@ -62,7 +62,7 @@ architecture test_suite of k_channels_x_n_bits_muxer_be_behavior_test_suite is
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When rst is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | x  | x_sel | q |
+    -- | rst | oe | cs | x  | x_sel | q | q_clk |
     (hi_asserted, hi_negated, hi_negated, "1001", 0, "00", '0'),
     (hi_asserted, hi_negated, hi_negated, "1001", 1, "00", '0'),
     (hi_negated, hi_asserted, hi_negated, "1001", 1, "00", '0'),
