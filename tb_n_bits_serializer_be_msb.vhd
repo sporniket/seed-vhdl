@@ -45,7 +45,14 @@ architecture test_suite of n_bits_serializer_be_msb_behavior_test_suite is
 
   -- declare record type
   type test_vector is record
-    rst, oe, cs, ds, q, q_bar, q_strobe : std_logic ;
+    rst : hi;
+    oe : hi;
+    cs : hi;
+    ds : hi ;
+    q : hi ;
+    q_bar : hi ;
+    q_clk : hi;
+    q_strobe : hi ;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;

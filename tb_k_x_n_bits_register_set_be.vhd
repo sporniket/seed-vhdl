@@ -50,11 +50,14 @@ architecture test_suite of k_x_n_bits_register_set_be_behavior_test_suite is
 
   -- declare record type
   type test_vector is record
-    rst, oe, cs : hi;
+    rst : hi;
+    oe : hi;
+    cs : hi;
     x_select : natural range 0 to test_register_count - 1;
     x_strobe : hi;
     x_value : vc(width_of_input - 1 downto 0);
     q : vc(width_of_output - 1 downto 0);
+    q_clk : hi;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;
@@ -74,7 +77,10 @@ architecture test_suite of k_x_n_bits_register_set_be_behavior_test_suite is
 
   -- test signals
   -- control
-  signal in_clk, in_rst, in_cs, in_oe : std_logic;
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
 
   -- inputs
   signal in_x_select : natural range 0 to test_register_count - 1;

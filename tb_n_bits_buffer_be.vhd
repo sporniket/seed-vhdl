@@ -49,8 +49,11 @@ architecture test_suite of n_bits_buffer_be_behavior_test_suite is
   -- declare record type
   type test_vector is record
     rst : hi;
-    oe, cs : hi ;
-    x, q : vc(index_msb downto 0) ;
+    oe : hi;
+    cs : hi;
+    x : vc(index_msb downto 0) ;
+    q : vc(index_msb downto 0) ;
+    q_clk : hi;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;

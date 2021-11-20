@@ -52,6 +52,7 @@ architecture test_suite of n_bits_counter_be_behavior_test_suite is
     oe :  hi;
     cs : hi;
     q : vc(index_msb downto 0);
+    q_clk : hi;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;

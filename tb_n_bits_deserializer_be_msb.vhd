@@ -48,9 +48,13 @@ architecture test_suite of n_bits_deserializer_be_msb_behavior_test_suite is
 
   -- declare record type
   type test_vector is record
-    rst, oe, cs : std_logic;
+    rst : hi;
+    oe : hi;
+    cs : hi;
     x : hi;
-    q, q_bar : std_logic_vector(width_of_output - 1 downto 0);
+    q : std_logic_vector(width_of_output - 1 downto 0);
+    q_bar : std_logic_vector(width_of_output - 1 downto 0);
+    q_clk : hi;
     q_strobe : std_logic;
   end record;
 

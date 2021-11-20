@@ -49,10 +49,14 @@ architecture test_suite of n_x_m_bits_joiner_be_msb_behavior_test_suite is
 
   -- declare record type
   type test_vector is record
-    rst, oe, cs : std_logic;
-    x : std_logic_vector(test_slice_width - 1 downto 0);
-    q, q_bar : std_logic_vector(width_of_output - 1 downto 0);
-    q_strobe : std_logic;
+    rst : hi;
+    oe : hi;
+    cs : hi;
+    x : vc(test_slice_width - 1 downto 0);
+    q : vc(width_of_output - 1 downto 0);
+    q_bar : vc(width_of_output - 1 downto 0);
+    q_clk : hi;
+    q_strobe : hi
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;
@@ -76,14 +80,14 @@ architecture test_suite of n_x_m_bits_joiner_be_msb_behavior_test_suite is
 
   -- test signals
   -- control
-  signal in_clk, in_rst, in_cs, in_oe : std_logic;
+  signal in_clk, in_rst, in_cs, in_oe : hi
 
   -- inputs
   signal in_x : vc(test_slice_width - 1 downto 0);
 
   -- outputs
   signal out_q, out_q_bar: vc(width_of_output - 1 downto 0);
-  signal out_q_strobe : std_logic;
+  signal out_q_strobe : hi
 
 begin
   dut : entity sporniket.n_x_m_bits_joiner_be_msb
