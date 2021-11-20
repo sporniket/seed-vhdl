@@ -68,6 +68,7 @@ entity n_x_m_bits_slicer_be_msb is
     -- Outputs are updated only when oe or rst are asserted.
     q : out vc(slice_width - 1 downto 0); -- the next slice, starting from the MSS
     q_bar : out vc(slice_width - 1 downto 0); -- the negated value of q
+    q_clk : out hi ; -- Pulse signaling an update from the output
     q_strobe : out hi -- output strobe, asserted when q is the LSS (Least Significant Slice)
 
   );
@@ -81,6 +82,7 @@ architecture behavior of n_x_m_bits_slicer_be_msb is
   constant value_zero : vc(index_msb_full downto 0) := (others => '0');
   constant suffix_shift : vc(index_msb_slice downto 0) := (others => '0');
   constant init_value_of_bit_strober : vc(index_msb_strober downto 0) := std_logic_vector(to_unsigned(1, slice_count));
+  signal int_clk: hi := hi_negated; -- the internal pulse to generete q_clk
 
   procedure send_to_output(
     variable source_value : in vc(index_msb_full downto 0);
@@ -88,24 +90,39 @@ architecture behavior of n_x_m_bits_slicer_be_msb is
     signal recipient_q : out vc(index_msb_slice downto 0);
     signal recipient_q_bar : out vc(index_msb_slice downto 0);
     signal recipient_strober : out hi
-) is
-begin
-  recipient_q <= source_value(index_msb_full downto index_msb_shift + 1);
-  recipient_q_bar <= not source_value(index_msb_full downto index_msb_shift + 1);
-  recipient_strober <= source_strober(index_msb_strober);
-end procedure;
+  ) is
+  begin
+    recipient_q <= source_value(index_msb_full downto index_msb_shift + 1);
+    recipient_q_bar <= not source_value(index_msb_full downto index_msb_shift + 1);
+    recipient_strober <= source_strober(index_msb_strober);
+  end procedure;
 
 begin
+  -- q_clk generation
+  on_int_clk : process (int_clk)
+    variable neg1 : lo;
+    variable neg2 : hi;
+  begin
+    neg1 := not int_clk;
+    neg2 := not neg1;
+    q_clk<= neg2;
+  end process on_int_clk;
+
+  -- main process
   on_event : process (clk, rst)
     variable value : vc(index_msb_full downto 0) := value_zero;
     variable bit_strober : vc(index_msb_strober downto 0) := init_value_of_bit_strober;
+    variable will_pulse : hi := hi_negated;
   begin
     if hi_asserted = rst then
       value := value_zero;
       bit_strober := init_value_of_bit_strober;
       send_to_output(value, bit_strober, q, q_bar, q_strobe);
+      will_pulse := hi_negated;
+      int_clk <= hi_negated;
     elsif hi_is_leading_edge(clk) then
       if hi_asserted = cs then
+        will_pulse := hi_asserted;
         if hi_asserted = x_strobe then
           value := x;
           bit_strober := init_value_of_bit_strober;
@@ -116,7 +133,13 @@ begin
       end if;
       if hi_asserted = oe then
         send_to_output(value, bit_strober, q, q_bar, q_strobe);
+        if hi_asserted = will_pulse then
+          int_clk <= hi_asserted ;
+        end if;
+        will_pulse := hi_negated;
       end if;
+    elsif hi_is_trailing_edge(clk) then
+      int_clk <= hi_negated;
     end if;
   end process on_event;
 end behavior;

@@ -1,7 +1,7 @@
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 -- Written in 2021 by David SPORN.
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
--- This file is part of [seed-vhdl] : 
+-- This file is part of [seed-vhdl] :
 -- <https://github.com/sporniket/seed-vhdl>
 --
 -- [seed-vhdl] is free hardware design :
@@ -67,13 +67,15 @@ entity k_channels_x_n_bits_demuxer_be is
 
     -- output signals
     -- Outputs are updated only when oe or rst are asserted.
-    q : out vc(channel_count * channel_width - 1 downto 0) -- The concatenation of the k channels x(k-1) & ... & x(0)
+    q : out vc(channel_count * channel_width - 1 downto 0); -- The concatenation of the k channels x(k-1) & ... & x(0)
+    q_clk : out hi -- Pulse signaling an update from the output
   );
 end k_channels_x_n_bits_demuxer_be;
 
 architecture behavior of k_channels_x_n_bits_demuxer_be is
   constant index_msb_full : integer := channel_count * channel_width - 1;
   constant value_zero : vc(index_msb_full downto 0) := (others => '0');
+  signal int_clk: hi := hi_negated; -- the internal pulse to generete q_clk
 
   function update_value
   (
@@ -93,14 +95,29 @@ architecture behavior of k_channels_x_n_bits_demuxer_be is
   end update_value;
 
 begin
+  -- q_clk generation
+  on_int_clk : process (int_clk)
+    variable neg1 : lo;
+    variable neg2 : hi;
+  begin
+    neg1 := not int_clk;
+    neg2 := not neg1;
+    q_clk<= neg2;
+  end process on_int_clk;
+
+  -- main process
   on_event : process (clk, rst)
     variable value : vc(index_msb_full downto 0) := value_zero;
+    variable will_pulse : hi := hi_negated;
   begin
     if hi_asserted = rst then
       value := value_zero;
       q <= value;
+      will_pulse := hi_negated;
+      int_clk <= hi_negated;
     elsif hi_is_leading_edge(clk) then
       if hi_asserted = cs then
+        will_pulse := hi_asserted;
         if hi_asserted = x_latch then
           value := update_value(value, x, x_sel);
         else
@@ -109,7 +126,13 @@ begin
       end if;
       if hi_asserted = oe then
         q <= value;
+        if hi_asserted = will_pulse then
+          int_clk <= hi_asserted ;
+        end if;
+        will_pulse := hi_negated;
       end if;
+    elsif hi_is_trailing_edge(clk) then
+      int_clk <= hi_negated;
     end if;
   end process on_event;
 end behavior;

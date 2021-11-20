@@ -50,33 +50,39 @@ architecture test_suite of k_channels_x_n_bits_demuxer_be_behavior_test_suite is
 
   -- declare record type
   type test_vector is record
-    rst, oe, cs : std_logic;
+    rst : hi;
+    oe : hi;
+    cs : hi;
     x : vc(width_of_input - 1 downto 0);
     x_latch : hi;
     x_sel : natural range 0 to 1;
     q : vc(width_of_output - 1 downto 0);
+    q_clk : hi;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When rst is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | x | x_latch | x_sel | q |
-    (hi_asserted, hi_negated, hi_negated, "10", hi_asserted, 0, "0000"),
-    (hi_asserted, hi_negated, hi_negated, "10", hi_asserted, 1, "0000"),
-    (hi_negated, hi_asserted, hi_negated, "10", hi_asserted, 1, "0000"),
-    (hi_negated, hi_asserted, hi_negated, "01", hi_asserted, 0, "0000"),
-    (hi_negated, hi_asserted, hi_asserted, "01", hi_asserted, 0, "0001"),
-    (hi_negated, hi_asserted, hi_asserted, "10", hi_asserted, 1, "1001"),
-    (hi_negated, hi_asserted, hi_negated, "11", hi_asserted, 0, "1001"),
-    (hi_negated, hi_negated, hi_asserted, "11", hi_asserted, 0, "1001"),
-    (hi_negated, hi_negated, hi_asserted, "00", hi_asserted, 1, "1001"),
-    (hi_negated, hi_asserted, hi_negated, "10", hi_asserted, 0, "0011"),
-    (hi_negated, hi_asserted, hi_asserted, "10", hi_negated, 1, "1000")
+    -- | rst | oe | cs | x | x_latch | x_sel | q | q_ckl |
+    (hi_asserted, hi_negated, hi_negated, "10", hi_asserted, 0, "0000", '0'),
+    (hi_asserted, hi_negated, hi_negated, "10", hi_asserted, 1, "0000", '0'),
+    (hi_negated, hi_asserted, hi_negated, "10", hi_asserted, 1, "0000", '0'),
+    (hi_negated, hi_asserted, hi_negated, "01", hi_asserted, 0, "0000", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "01", hi_asserted, 0, "0001", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "10", hi_asserted, 1, "1001", '1'),
+    (hi_negated, hi_asserted, hi_negated, "11", hi_asserted, 0, "1001", '0'),
+    (hi_negated, hi_negated, hi_asserted, "11", hi_asserted, 0, "1001", '0'),
+    (hi_negated, hi_negated, hi_asserted, "00", hi_asserted, 1, "1001", '0'),
+    (hi_negated, hi_asserted, hi_negated, "10", hi_asserted, 0, "0011", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "10", hi_negated, 1, "1000", '1')
   );
 
   -- test signals
   -- control
-  signal in_clk, in_rst, in_cs, in_oe : std_logic;
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
 
   -- inputs
   signal in_x : vc(width_of_input - 1 downto 0);
@@ -85,6 +91,7 @@ architecture test_suite of k_channels_x_n_bits_demuxer_be_behavior_test_suite is
 
   -- outputs
   signal out_q: vc(width_of_output - 1 downto 0);
+  signal out_q_clk : hi;
 
 begin
   dut : entity sporniket.k_channels_x_n_bits_demuxer_be
@@ -106,7 +113,8 @@ begin
       x_sel => in_x_sel,
 
       -- outputs
-      q => out_q
+      q => out_q,
+      q_clk => out_q_clk
     );
 
   execute : process
@@ -130,7 +138,7 @@ begin
       end if;
       wait for 1 ns;
 
-      -- verify
+      -- verify -- general
       assert
         out_q = test_vectors(i).q
       report "test_vector " & integer'image(i) & " failed " &
@@ -139,11 +147,26 @@ begin
         "' instead of '" &
         to_string(test_vectors(i).q) & "'"
       severity failure ;
+      -- verify -- q_clk
+      assert
+        out_q_clk = test_vectors(i).q_clk
+      report "test_vector " & integer'image(i) & " failed **for q_clk** " &
+        " got '" &
+        to_string(out_q_clk) &
+        "' instead of '" &
+        to_string(test_vectors(i).q_clk) & "'"
+      severity failure ;
 
       -- end of clock pulse, anyway
       wait for 1 ns;
       in_clk <= '0';
       wait for 1 ns;
+
+      -- verify -- end of q_clk pulse.
+      assert
+        out_q_clk = hi_negated
+      report "test_vector " & integer'image(i) & " failed, q_clk is not negated."
+      severity failure ;
 
     end loop;
     report "Done.";

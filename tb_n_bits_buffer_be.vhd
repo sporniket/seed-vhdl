@@ -49,29 +49,38 @@ architecture test_suite of n_bits_buffer_be_behavior_test_suite is
   -- declare record type
   type test_vector is record
     rst : hi;
-    oe, cs : hi ;
-    x, q : vc(index_msb downto 0) ;
+    oe : hi;
+    cs : hi;
+    x : vc(index_msb downto 0) ;
+    q : vc(index_msb downto 0) ;
+    q_clk : hi;
   end record;
 
   type test_vector_array is array (natural range <>) of test_vector;
   constant test_vectors : test_vector_array := (
     -- When `rst` is asserted, the expected value is tested without clock pulse
-    -- | rst | oe | cs | d | q |
-    (hi_asserted, hi_negated, hi_negated, "11111", "00000"),
-    (hi_negated, hi_asserted, hi_asserted, "11111", "11111"),
-    (hi_negated, hi_asserted, hi_asserted, "10101", "10101"),
-    (hi_negated, hi_negated,  hi_asserted, "01010", "10101"),
-    (hi_negated, hi_asserted, hi_negated,  "11011", "01010"),
-    (hi_negated, hi_asserted, hi_asserted, "00011", "00011")
+    -- | rst | oe | cs | d | q | q_ckl |
+    (hi_asserted, hi_negated, hi_negated, "11111", "00000", '0'),
+    (hi_negated, hi_asserted, hi_asserted, "11111", "11111", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "10101", "10101", '1'),
+    (hi_negated, hi_negated,  hi_asserted, "01010", "10101", '0'),
+    (hi_negated, hi_asserted, hi_negated,  "11011", "01010", '1'),
+    (hi_negated, hi_asserted, hi_asserted, "00011", "00011", '1')
   );
 
   -- test signals
+  -- control
+  signal in_clk : hi;
+  signal in_rst : hi;
+  signal in_cs : hi;
+  signal in_oe : hi;
+
   -- inputs
-  signal in_clk,in_rst,in_cs,in_oe: hi ;
   signal in_x : vc(index_msb downto 0) ;
 
   -- outputs
   signal out_q : vc(index_msb downto 0) ;
+  signal out_q_clk : hi;
 
 begin
   dut : entity sporniket.n_bits_buffer_be
@@ -90,7 +99,8 @@ begin
       x => in_x,
 
       -- outputs
-      q => out_q
+      q => out_q,
+      q_clk => out_q_clk
     );
 
   execute:process
@@ -112,17 +122,32 @@ begin
       end if;
       wait for 1 ns;
 
-      -- verify
+      -- verify -- general
       assert out_q = test_vectors(i).q
       report "test_vector " & integer'image(i) & " failed " &
         " got '" & to_string(out_q) &
         "' instead of '" & to_string(test_vectors(i).q) & "'"
       severity failure;
+      -- verify -- q_clk
+      assert
+        out_q_clk = test_vectors(i).q_clk
+      report "test_vector " & integer'image(i) & " failed **for q_clk** " &
+        " got '" &
+        to_string(out_q_clk) &
+        "' instead of '" &
+        to_string(test_vectors(i).q_clk) & "'"
+      severity failure ;
 
       -- end of clock pulse, anyway
       wait for 1 ns;
       in_clk <= '0';
       wait for 1 ns;
+
+      -- verify -- end of q_clk pulse.
+      assert
+        out_q_clk = hi_negated
+      report "test_vector " & integer'image(i) & " failed, q_clk is not negated."
+      severity failure ;
 
     end loop;
     report "Done." ;
