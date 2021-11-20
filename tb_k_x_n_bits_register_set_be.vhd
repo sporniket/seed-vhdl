@@ -111,7 +111,8 @@ begin
       x_value => in_x_value,
 
       -- outputs
-      q => out_q
+      q => out_q,
+      q_clk => out_q_clk
     );
 
   execute : process

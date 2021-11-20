@@ -101,7 +101,8 @@ begin
       rst => in_rst,
 
       -- outputs
-      q => out_q
+      q => out_q,
+      q_clk => out_q_clk
     );
 
   execute : process

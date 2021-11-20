@@ -112,6 +112,7 @@ begin
       -- outputs
       q => out_q,
       q_bar => out_q_bar,
+      q_clk => out_q_clk,
       q_strobe => out_q_strobe
     );
 
