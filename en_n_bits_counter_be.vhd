@@ -73,14 +73,11 @@ architecture behavior of n_bits_counter_be is
   signal int_clk: hi := hi_negated; -- the internal pulse to generete q_clk
 begin
   -- q_clk generation
-  on_int_clk : process (int_clk)
-    variable neg1 : lo;
-    variable neg2 : hi;
-  begin
-    neg1 := not int_clk;
-    neg2 := not neg1;
-    q_clk<= neg2;
-  end process on_int_clk;
+  delay: entity sporniket.single_bit_echo
+    port map(
+      x => int_clk,
+      q => q_clk
+    );
 
   -- main process
   on_event:process(clk,rst)
