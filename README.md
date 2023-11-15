@@ -1,3 +1,7 @@
+> NOTE, 2023-11-15 : Since long ago, I switched to [Amaranth HDL (previously nMigen)](https://github.com/amaranth-lang/amaranth/) and I don't plan on writing VHDL again for the foreseeable future, this repository is archived as of today (2023-11-15)
+
+---
+
 # seed-vhdl
 A VHDL library to bootstrap a VHDL project with all the code I deemed usefull for any purpose.
 
