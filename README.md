@@ -1,3 +1,5 @@
+> NOTE, 2025-05-13 : previously mentionned foreseeable future seems to span up to 18 monthes. I need to do some vhdl again, so I unfreeze this repository. I plan to fix the design flaws of the components I wrote. Slowly.
+
 > NOTE, 2023-11-15 : Since long ago, I switched to [Amaranth HDL (previously nMigen)](https://github.com/amaranth-lang/amaranth/) and I don't plan on writing VHDL again for the foreseeable future, this repository is archived as of today (2023-11-15)
 
 ---
